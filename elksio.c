@@ -43,11 +43,14 @@
 #include <time.h>
 #include <errno.h>
 #ifndef O_WRONLY
-#include <sys/file.h>
+//#include <sys/file.h>
 #ifdef X_OK
 #undef X_OK
 #endif /* X_OK */
 #endif /* O_WRONLY */
+
+#include <unistd.h>
+#include <fcntl.h>
 
 #include "cdefs.h"
 #include "debug.h"
@@ -128,7 +131,9 @@ dodebug(int fc, UCHAR * label, UCHAR * sval, long nval) {
 */
 int
 devopen(char *device) {
-    ttyfd = 0;
+    ttyfd = open(device, O_RDWR | O_EXCL | O_NOCTTY | O_NONBLOCK);
+    if (ttyfd < 0)
+        return(0);
     return(1);
 }
 
@@ -177,7 +182,7 @@ devrestore(void) {
 */
 int
 devclose(void) {
-    ttyfd = -1;
+    close(ttyfd);
     return(1);
 }
 
@@ -240,6 +245,8 @@ readpkt(struct k_data * k, UCHAR *p, int len, int fc) {
     int x, n, max;
     short flag;
     UCHAR c;
+    char buf[512];
+    int buf_n = 0, buf_i = 0;
 /*
   Timeout not implemented in this sample.
   It should not be needed.  All non-embedded Kermits that are capable of
@@ -268,7 +275,13 @@ readpkt(struct k_data * k, UCHAR *p, int len, int fc) {
 #endif	/* DEBUG */
 
     while (1) {
-        x = getchar();                  /* Replace this with real i/o */
+        //x = getchar();                  /* Replace this with real i/o */
+        if (buf_n == buf_i) {
+            if (buf_n = read(ttyfd, buf, sizeof(buf)) < 1)
+                return (-1);
+            buf_i = 0;
+        }
+        x = buf[buf_i++];
         c = (k->parity) ? x & 0x7f : x & 0xff; /* Strip parity */
 
 #ifdef F_CTRLC

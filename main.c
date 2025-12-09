@@ -296,6 +296,7 @@ main(int argc, char ** argv) {
     char c;
     UCHAR *inbuf;
     short r_slot;
+    const char *device = "/dev/ttyS0";
 
     parity = P_PARITY;                  /* Set this to desired parity */
     status = X_OK;                      /* Initial kermit status */
@@ -319,9 +320,9 @@ main(int argc, char ** argv) {
 
 /* THE REAL STUFF IS FROM HERE DOWN */
 
-    if (!devopen("dummy"))		/* Open the communication device */
+    if (!devopen(device))		/* Open the communication device */
       doexit(FAILURE);
-    if (!devsettings("dummy"))		/* Perform any needed settings */
+    if (!devsettings(device))		/* Perform any needed settings */
       doexit(FAILURE);
     if (db)				/* Open debug log if requested */
       debug(DB_OPN,"debug.log",0,0);
