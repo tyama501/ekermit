@@ -277,9 +277,11 @@ readpkt(struct k_data * k, UCHAR *p, int len, int fc) {
     while (1) {
         //x = getchar();                  /* Replace this with real i/o */
         if (buf_n == buf_i) {
-            if (buf_n = read(ttyfd, buf, sizeof(buf)) < 1)
+            if ((buf_n = read(ttyfd, buf, sizeof(buf))) < 0)
                 return (-1);
             buf_i = 0;
+            if (buf_n == 0)
+                continue;
         }
         x = buf[buf_i++];
         c = (k->parity) ? x & 0x7f : x & 0xff; /* Strip parity */
