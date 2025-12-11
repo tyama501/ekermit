@@ -2,7 +2,7 @@ BASEDIR=$(TOPDIR)/elkscmd
 
 include $(BASEDIR)/Makefile-rules
 
-LOCALFLAGS = -DNO_LP
+LOCALFLAGS = -DNO_LP -DELKS
 
 PRGS = ekermit
 OBJS = main.o kermit.o elksio.o

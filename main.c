@@ -48,6 +48,12 @@
 #include <errno.h>
 #include <stdlib.h>
 #endif /* __linux */
+#ifdef ELKS
+#include <errno.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <ctype.h>
+#endif
 
 /*
   Sample prototypes for i/o functions.
