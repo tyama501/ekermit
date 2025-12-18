@@ -131,7 +131,7 @@ dodebug(int fc, UCHAR * label, UCHAR * sval, long nval) {
 */
 int
 devopen(char *device) {
-    ttyfd = open(device, O_RDWR | O_EXCL | O_NOCTTY | O_NONBLOCK);
+    ttyfd = open(device, O_RDWR | O_EXCL);
     if (ttyfd < 0)
         return(0);
     return(1);
