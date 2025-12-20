@@ -51,6 +51,7 @@
 
 #include <unistd.h>
 #include <fcntl.h>
+#include <termios.h>
 
 #include "cdefs.h"
 #include "debug.h"
@@ -68,6 +69,8 @@ UCHAR i_buf[IBUFLEN+8];			/* File output buffer */
 */
 static int ttyfd, ofile = -1;		/* File descriptors */
 static FILE * ifile = (FILE *)0;	/* and pointers */
+
+static struct termios org_term, new_term;
 
 /* Debugging */
 
@@ -134,6 +137,17 @@ devopen(char *device) {
     ttyfd = open(device, O_RDWR | O_EXCL);
     if (ttyfd < 0)
         return(0);
+    if (tcgetattr(ttyfd, &org_term) >= 0) {
+        new_term = org_term;
+        new_term.c_lflag &= ~(ICANON | ISIG | ECHO | ECHOE | ECHONL);
+        new_term.c_iflag &= ~ICRNL;
+        new_term.c_cflag |= CS8 | CREAD;
+        new_term.c_cc[VMIN] = 255;
+        new_term.c_cc[VTIME] = 1;
+        tcsetattr(ttyfd, TCSANOW, &new_term);
+    } else {
+        return(0);
+    }
     return(1);
 }
 
@@ -182,6 +196,7 @@ devrestore(void) {
 */
 int
 devclose(void) {
+    tcsetattr(ttyfd, TCSAFLUSH, &org_term);
     close(ttyfd);
     return(1);
 }
