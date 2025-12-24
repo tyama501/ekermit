@@ -302,7 +302,7 @@ main(int argc, char ** argv) {
     char c;
     UCHAR *inbuf;
     short r_slot;
-    const char *device = "/dev/ttyS0";
+    char *device = "/dev/ttyS0";
 
     parity = P_PARITY;                  /* Set this to desired parity */
     status = X_OK;                      /* Initial kermit status */
@@ -317,6 +317,10 @@ main(int argc, char ** argv) {
 	    c = *(*xargv+1);		/* Get the option letter */
 	    x = doarg(c);		/* Go handle the option */
 	    if (x < 0) doexit(FAILURE);
+#ifdef ELKS
+	} else if (xargc == 1) {
+	    device = argv[argc-1];
+#endif
 	} else {			/* No dash where expected */
 	    fatal("Malformed command-line option: '",*xargv,"'");
 	}

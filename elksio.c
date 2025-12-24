@@ -49,6 +49,8 @@
 #endif /* X_OK */
 #endif /* O_WRONLY */
 
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <termios.h>
@@ -135,8 +137,15 @@ dodebug(int fc, UCHAR * label, UCHAR * sval, long nval) {
 int
 devopen(char *device) {
     ttyfd = open(device, O_RDWR | O_EXCL);
-    if (ttyfd < 0)
-        return(0);
+    if (ttyfd < 0) {
+        fprintf(stderr, "Failed to open device\n");
+        if (strncmp(ttyname(STDIN_FILENO), "/dev/ttys", 9) == 0) {
+            fprintf(stderr, "Use STDIN_FILENO instead\n");
+            ttyfd = STDIN_FILENO;
+        } else {
+            return(0);
+        }
+    }
     if (tcgetattr(ttyfd, &org_term) >= 0) {
         new_term = org_term;
         new_term.c_lflag &= ~(ICANON | ISIG | ECHO | ECHOE | ECHONL);
