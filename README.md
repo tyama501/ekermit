@@ -12,13 +12,15 @@ Usage:
     ekermit <options> [serial device]
 
 To receive file  
-ekermit -r  
+
+    ekermit -r  
 then send file from the connected device.  
 
 To send file  
 set the connected device ready to receive  
 then  
-ekermit -s <files>  
+
+    ekermit -s <files>  
 
 The default serial device is /dev/ttyS0.
 
