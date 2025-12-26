@@ -47,6 +47,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <termios.h>
+#include <signal.h>
 #ifndef O_WRONLY
 //#include <sys/file.h>
 #ifdef X_OK
@@ -72,6 +73,13 @@ static int ttyfd, ofile = -1;		/* File descriptors */
 static FILE * ifile = (FILE *)0;	/* and pointers */
 
 static struct termios org_term, new_term;
+
+static void sig_handler(int sig)
+{
+    tcsetattr(ttyfd, TCSAFLUSH, &org_term);
+    close(ttyfd);
+    exit(1);
+}
 
 /* Debugging */
 
@@ -156,6 +164,7 @@ devopen(char *device) {
     } else {
         return(0);
     }
+    signal(SIGINT, sig_handler);
     return(1);
 }
 
