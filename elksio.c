@@ -147,7 +147,7 @@ devopen(char *device) {
     }
     if (tcgetattr(ttyfd, &org_term) >= 0) {
         new_term = org_term;
-        new_term.c_lflag &= ~(ICANON | ISIG | ECHO | ECHOE | ECHONL);
+        new_term.c_lflag &= ~(ISIG | ECHO | ECHOE | ECHONL);
         new_term.c_iflag &= ~ICRNL;
         new_term.c_cflag |= CS8 | CREAD;
         new_term.c_cc[VMIN] = 255;
@@ -170,7 +170,11 @@ int
 pktmode(short on) {
     if (ttyfd < 0)                      /* Device must be open */
       return(0);
-    system(on ? "stty raw -echo" : "stty sane"); /* Crude but effective */
+    if (on)
+      new_term.c_lflag &= ~ICANON;
+    else
+      new_term.c_lflag |= ICANON;
+    tcsetattr(ttyfd, TCSAFLUSH, &new_term);
     return(1);
 }
 
