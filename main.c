@@ -40,6 +40,12 @@
   STUFF to see the real stuff.  ANSI C required.  Note: order of the
   following includes is important.
 */
+#ifdef ELKS
+#include <errno.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <ctype.h>
+#endif
 #include "cdefs.h"      /* Data types for all modules */
 #include "debug.h"	/* Debugging */
 #include "platform.h"	/* Platform-specific includes and definitions */
@@ -48,12 +54,6 @@
 #include <errno.h>
 #include <stdlib.h>
 #endif /* __linux */
-#ifdef ELKS
-#include <errno.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <ctype.h>
-#endif
 
 /*
   Sample prototypes for i/o functions.

@@ -42,18 +42,17 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <errno.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <termios.h>
 #ifndef O_WRONLY
 //#include <sys/file.h>
 #ifdef X_OK
 #undef X_OK
 #endif /* X_OK */
 #endif /* O_WRONLY */
-
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <termios.h>
 
 #include "cdefs.h"
 #include "debug.h"
@@ -139,7 +138,7 @@ devopen(char *device) {
     ttyfd = open(device, O_RDWR | O_EXCL);
     if (ttyfd < 0) {
         fprintf(stderr, "Failed to open device\n");
-        if (strncmp(ttyname(STDIN_FILENO), "/dev/ttys", 9) == 0) {
+        if (strncmp(ttyname(STDIN_FILENO), "/dev/ttyS", 9) == 0) {
             fprintf(stderr, "Use STDIN_FILENO instead\n");
             ttyfd = STDIN_FILENO;
         } else {
