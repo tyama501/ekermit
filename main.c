@@ -123,7 +123,11 @@ doexit(int status) {
 void
 usage() {
     fprintf(stderr,"E-Kermit %s\n",VERSION);
+#ifdef ELKS
+    fprintf(stderr,"Usage: %s <options> [serial device]\n",xname);
+#else
     fprintf(stderr,"Usage: %s <options>\n",xname);
+#endif
     fprintf(stderr,"Options:\n");
     fprintf(stderr," -r           Receive files\n");
 #ifndef RECVONLY
