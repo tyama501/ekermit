@@ -22,10 +22,10 @@ ekermit -s <files>
 
 The default serial device is /dev/ttyS0.
 
-Currently, there is no option to set baud rate.
-To set baud rate, stty can be used in ELKS.
+Currently, there is no option to set baud rate.  
+To set baud rate, stty can be used in ELKS.  
 For example, 
-to set 19200 bps for ttyS0,
+to set 19200 bps for ttyS0,  
 stty 19200 < /dev/ttyS0
 
 Only 8bits, no flow control, no parity are supported for now.
