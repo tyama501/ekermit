@@ -146,7 +146,7 @@ devopen(char *device) {
     ttyfd = open(device, O_RDWR | O_EXCL);
     if (ttyfd < 0) {
         fprintf(stderr, "Failed to open device\n");
-        if (strncmp(ttyname(STDIN_FILENO), "/dev/ttyS", 9) == 0) {
+        if (strncasecmp(ttyname(STDIN_FILENO), "/dev/ttyS", 9) == 0) {
             fprintf(stderr, "Use STDIN_FILENO instead\n");
             ttyfd = STDIN_FILENO;
         } else {
