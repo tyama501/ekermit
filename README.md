@@ -24,6 +24,9 @@ then
 
 The default serial device is /dev/ttyS0.
 
+If opening the device failed and the current ttyname is the serial device,  
+then STDIN_FILENO is used instead.
+
 Currently, there is no option to set baud rate.  
 To set baud rate, stty can be used in ELKS.  
 For example, 
