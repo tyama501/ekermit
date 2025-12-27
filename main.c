@@ -311,7 +311,7 @@ main(int argc, char ** argv) {
     char c;
     UCHAR *inbuf;
     short r_slot;
-    char *device = "/dev/ttyS0";
+    char device[] = "/dev/ttyS0";
 
     parity = P_PARITY;                  /* Set this to desired parity */
     status = X_OK;                      /* Initial kermit status */
@@ -328,7 +328,9 @@ main(int argc, char ** argv) {
 	    if (x < 0) doexit(FAILURE);
 #ifdef ELKS
 	} else if (xargc == 1) {
-	    device = argv[argc-1];
+	    strncpy(device, argv[argc-1], sizeof(device)-1);
+	    device[sizeof(device) - 1] = '\0';
+	    argv[argc-1] = 0;		/* Clear for filelist */
 #endif
 	} else {			/* No dash where expected */
 	    fatal("Malformed command-line option: '",*xargv,"'");
