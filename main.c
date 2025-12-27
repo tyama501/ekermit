@@ -43,6 +43,7 @@
 #ifdef ELKS
 #include <errno.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <ctype.h>
 #endif
@@ -196,6 +197,10 @@ doarg(char c) {				/* Command-line option parser */
 #endif /* DEBUG) */
 		if (**xargv == '-')
 		  break;
+#ifdef ELKS
+		if (strncasecmp(s, "/dev/ttyS", 9) == 0)	/* Stop if device name is found */
+		  break;
+#endif
 		errno = 0;
 		x = stat(s,&statbuf);
 		if (x < 0)
